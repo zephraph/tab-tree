@@ -1,0 +1,43 @@
+[tools]
+node = "22.12.0"
+"npm:sv" = "latest"
+pnpm = "9.15.1"
+
+[settings]
+experimental = true
+
+[hooks]
+postinstall = "pnpm i"
+
+[tasks.dev]
+description = "Start development server for all supported browsers"
+run = "wxt"
+
+[tasks."dev:firefox"]
+description = "Start development server specifically for Firefox browser"
+run = "wxt -b firefox"
+alias = "dev:ff"
+
+[tasks.build]
+description = "Build the extension for all supported browsers"
+run = "wxt build"
+
+[tasks."build:firefox"]
+description = "Build the extension for Firefox browser"
+run = "wxt build -b firefox"
+
+[tasks.zip]
+description = "Create ZIP archives for all supported browser builds"
+run = "wxt zip"
+
+[tasks."zip:firefox"]
+description = "Create a ZIP archive of the built extension for Firefox"
+run = "wxt zip -b firefox"
+
+[tasks.check]
+description = "Run type checking with svelte-check"
+run = "svelte-check --tsconfig ./tsconfig.json"
+
+[tasks.upgrade]
+description = "Interactively upgrade dependencies to the latest version"
+run = "pnpm up -iL"
