@@ -77,14 +77,6 @@ class TabTreeManager {
     });
   }
 
-  private getTabIcon(tab: TabInfo): "svelte" | "folder" | "js" {
-    // This is a simple implementation - you might want to expand this
-    // based on the URL or other factors
-    if (tab.url.endsWith(".js")) return "js";
-    if (tab.url.endsWith(".svelte")) return "svelte";
-    return "folder";
-  }
-
   private buildTreeItem(tabId: number): TreeItem {
     const tab = this.tabsMap.get(tabId)!;
     const children: TreeItem[] = [];
@@ -98,7 +90,7 @@ class TabTreeManager {
 
     return {
       title: tab.title,
-      icon: this.getTabIcon(tab),
+      favIconUrl: tab.favIconUrl,
       ...(children.length > 0 && { children }),
     };
   }

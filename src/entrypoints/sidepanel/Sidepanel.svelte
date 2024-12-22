@@ -27,7 +27,7 @@
   $: treeItems = $treeItemsStore;
 </script>
 
-<div class="flex flex-col h-full rounded-xl bg-white text-neutral-900">
+<div class="flex flex-col h-full rounded-xl bg-zinc-800 text-neutral-100">
   <div class="flex flex-col gap-1 px-4 pt-4">
     <h3 class="text-lg font-bold">Open Tabs</h3>
     <hr />

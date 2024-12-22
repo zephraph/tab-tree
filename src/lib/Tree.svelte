@@ -1,26 +1,15 @@
 <script module lang="ts">
-  import {
-    ArrowLeft,
-    Folder,
-    FolderOpen,
-    FileJson as JS,
-    Badge as Svelte,
-  } from "lucide-svelte";
-
-  type Icon = "svelte" | "folder" | "js";
+  import { ArrowLeft, ChevronRight, ChevronDown } from "lucide-svelte";
 
   export type TreeItem = {
     title: string;
-    icon: Icon;
-
+    favIconUrl?: string;
     children?: TreeItem[];
   };
 
   export const icons = {
-    svelte: Svelte,
-    folder: Folder,
-    folderOpen: FolderOpen,
-    js: JS,
+    chevronRight: ChevronRight,
+    chevronDown: ChevronDown,
     highlight: ArrowLeft,
   };
 </script>
@@ -43,7 +32,7 @@
   } = getContext<TreeView>("tree");
 </script>
 
-{#each treeItems as { title, icon, children }, i}
+{#each treeItems as { title, favIconUrl, children }, i}
   {@const itemId = `${title}-${i}`}
   {@const hasChildren = !!children?.length}
 
@@ -55,18 +44,31 @@
         hasChildren,
       })}
     >
-      <!-- Add icon. -->
-      {#if icon === "folder" && hasChildren && $isExpanded(itemId)}
-        {@const SvelteComponent = icons["folderOpen"]}
-        <SvelteComponent class="h-4 w-4" />
+      <!-- Favicon or fallback -->
+      {#if favIconUrl}
+        <img src={favIconUrl} alt="" class="h-4 w-4" />
       {:else}
-        {@const SvelteComponent_1 = icons[icon]}
-        <SvelteComponent_1 class="h-4 w-4" />
+        <div class="h-4 w-4 bg-gray-200 rounded-sm" />
+        <!-- Fallback for no favicon -->
       {/if}
 
-      <span class="select-none">{title}</span>
+      <!-- Expansion indicator for items with children -->
+      {#if hasChildren}
+        {#if $isExpanded(itemId)}
+          {@const SvelteComponent = icons["chevronDown"]}
+          <SvelteComponent class="h-4 w-4" />
+        {:else}
+          {@const SvelteComponent = icons["chevronRight"]}
+          <SvelteComponent class="h-4 w-4" />
+        {/if}
+      {:else}
+        <div class="w-4" />
+        <!-- Spacer for items without children -->
+      {/if}
 
-      <!-- Selected icon. -->
+      <span class="select-none truncate max-w-[200px]" {title}>{title}</span>
+
+      <!-- Selected icon -->
       {#if $isSelected(itemId)}
         {@const SvelteComponent_2 = icons["highlight"]}
         <SvelteComponent_2 class="h-4 w-4" />
