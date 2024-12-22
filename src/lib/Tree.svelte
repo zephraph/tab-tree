@@ -59,7 +59,7 @@
         id: itemId,
         hasChildren,
       })}
-      on:click={(e) => handleItemClick(e, tabId)}
+      onclick={(e) => handleItemClick(e, tabId)}
       role="button"
       tabindex="0"
     >
@@ -82,10 +82,10 @@
       <button
         type="button"
         class="opacity-0 group-hover:opacity-100 hover:bg-zinc-600 p-1 rounded absolute right-1 cursor-pointer flex-shrink-0"
-        on:click={(e) => handleClose(e, tabId)}
-        on:keydown={(e) => e.key === "Enter" && handleClose(e, tabId)}
+        onclick={(e) => handleClose(e, tabId)}
+        onkeydown={(e) => e.key === "Enter" && handleClose(e, tabId)}
       >
-        <svelte:component this={icons.close} class="h-3 w-3" />
+        <icons.close class="h-3 w-3" />
       </button>
     </div>
 

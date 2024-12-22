@@ -1,10 +1,19 @@
 <script lang="ts">
   import { ChevronRight, ChevronDown } from "lucide-svelte";
 
-  export let favIconUrl: string | undefined;
-  export let isExpanded: boolean;
-  export let childCount: number;
-  export let hasChildren: boolean;
+  interface Props {
+    favIconUrl: string | undefined;
+    isExpanded: boolean;
+    childCount: number;
+    hasChildren: boolean;
+  }
+
+  let {
+    favIconUrl,
+    isExpanded,
+    childCount,
+    hasChildren
+  }: Props = $props();
 </script>
 
 <div class="relative group/icon">
@@ -17,7 +26,7 @@
     {#if favIconUrl}
       <img src={favIconUrl} alt="" class="h-full w-full" />
     {:else}
-      <div class="h-full w-full bg-gray-200 rounded-sm" />
+      <div class="h-full w-full bg-gray-200 rounded-sm"></div>
     {/if}
   </div>
 

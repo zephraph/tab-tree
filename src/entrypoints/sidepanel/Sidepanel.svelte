@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { createTreeView } from "@melt-ui/svelte";
   import { setContext } from "svelte";
   import { onMount } from "svelte";
@@ -16,7 +18,7 @@
     elements: { tree },
   } = ctx;
 
-  let treeItems: TreeItem[] = [];
+  let treeItems: TreeItem[] = $state([]);
 
   onMount(() => {
     // Initial tree items
@@ -24,7 +26,9 @@
   });
 
   // Subscribe to tree items store
-  $: treeItems = $treeItemsStore;
+  run(() => {
+    treeItems = $treeItemsStore;
+  });
 </script>
 
 <div class="flex flex-col h-full rounded-xl bg-zinc-800 text-neutral-100">
