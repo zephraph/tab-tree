@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import { createTreeView } from "@melt-ui/svelte";
   import { setContext } from "svelte";
   import { onMount } from "svelte";
 
-  import type { TreeItem } from "$lib/Tree.svelte";
+  import type { TreeItem } from "$lib/tabTree";
   import Tree from "$lib/Tree.svelte";
   import { tabTreeManager, treeItemsStore } from "$lib/tabTree";
 

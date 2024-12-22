@@ -129,6 +129,10 @@ class TabTreeManager {
   public async closeTab(tabId: number) {
     await browser.tabs.remove(tabId);
   }
+
+  public async createTab() {
+    await browser.tabs.create({});
+  }
 }
 
 // Create and export a singleton instance

@@ -1,5 +1,5 @@
 <script module lang="ts">
-  import { ArrowLeft, ChevronRight, ChevronDown, X } from "lucide-svelte";
+  import { X } from "lucide-svelte";
   import type { TreeItem } from "./tabTree";
 </script>
 
@@ -29,10 +29,21 @@
     );
   });
 
-  function handleClose(event: MouseEvent, tabId: number) {
+  function handleClose(event: Event, tabId: number) {
     event.stopPropagation();
     event.preventDefault();
     tabTreeManager.closeTab(tabId);
+  }
+
+  function handleKeydown(event: KeyboardEvent) {
+    if (event.key === "n") {
+      event.preventDefault();
+      tabTreeManager.createTab();
+    } else if (event.key === "q" && $selectedItem) {
+      event.preventDefault();
+      const tabId = parseInt($selectedItem.getAttribute("data-tab-id")!);
+      tabTreeManager.closeTab(tabId);
+    }
   }
 
   function getChildCount(children: TreeItem[] | undefined): number {
@@ -60,6 +71,7 @@
         id: itemId,
         hasChildren,
       })}
+      onkeydown={handleKeydown}
     >
       <TreeItemIcon
         {favIconUrl}
@@ -77,7 +89,7 @@
         type="button"
         href="/"
         class="opacity-0 group-focus:opacity-100 group-hover:opacity-100 focus:opacity-100 hover:bg-zinc-600 p-1 rounded absolute right-1 cursor-pointer flex-shrink-0"
-        onclick={(e) => handleClose(e, tabId)}
+        onmousedown={(e) => handleClose(e, tabId)}
         onkeydown={(e) => e.key === "Enter" && handleClose(e, tabId)}
       >
         <X class="h-3 w-3" />
