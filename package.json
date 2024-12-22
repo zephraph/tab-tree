@@ -15,6 +15,7 @@
     "@tsconfig/svelte": "^5.0.4",
     "@types/webextension-polyfill": "^0.12.1",
     "@wxt-dev/module-svelte": "^2.0.0",
+    "lucide-svelte": "^0.469.0",
     "prettier": "^3.4.2",
     "prettier-plugin-svelte": "^3.3.2",
     "svelte": "^5.1.16",
