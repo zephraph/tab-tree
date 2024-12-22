@@ -1,5 +1,11 @@
-import type { TreeItem } from "./Tree.svelte";
 import { writable } from "svelte/store";
+
+export type TreeItem = {
+  title: string;
+  favIconUrl?: string;
+  children?: TreeItem[];
+  tabId: number;
+};
 
 type TabInfo = {
   id: number;
@@ -91,6 +97,7 @@ class TabTreeManager {
     return {
       title: tab.title,
       favIconUrl: tab.favIconUrl,
+      tabId: tab.id,
       ...(children.length > 0 && { children }),
     };
   }
@@ -109,6 +116,14 @@ class TabTreeManager {
       items.push(this.buildTreeItem(rootTabId));
     }
     return items;
+  }
+
+  public async activateTab(tabId: number) {
+    await browser.tabs.update(tabId, { active: true });
+    const tab = await browser.tabs.get(tabId);
+    if (tab.windowId) {
+      await browser.windows.update(tab.windowId, { focused: true });
+    }
   }
 }
 

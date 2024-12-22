@@ -1,11 +1,6 @@
 <script module lang="ts">
   import { ArrowLeft, ChevronRight, ChevronDown } from "lucide-svelte";
-
-  export type TreeItem = {
-    title: string;
-    favIconUrl?: string;
-    children?: TreeItem[];
-  };
+  import type { TreeItem } from "./tabTree";
 
   export const icons = {
     chevronRight: ChevronRight,
@@ -18,6 +13,7 @@
   import Tree from "./Tree.svelte";
   import { melt, type TreeView } from "@melt-ui/svelte";
   import { getContext } from "svelte";
+  import { tabTreeManager } from "./tabTree";
 
   interface Props {
     treeItems: TreeItem[];
@@ -30,9 +26,14 @@
     elements: { item, group },
     helpers: { isExpanded, isSelected },
   } = getContext<TreeView>("tree");
+
+  function handleItemClick(event: MouseEvent, tabId: number) {
+    event.stopPropagation();
+    tabTreeManager.activateTab(tabId);
+  }
 </script>
 
-{#each treeItems as { title, favIconUrl, children }, i}
+{#each treeItems as { title, favIconUrl, children, tabId }, i}
   {@const itemId = `${title}-${i}`}
   {@const hasChildren = !!children?.length}
 
@@ -43,6 +44,7 @@
         id: itemId,
         hasChildren,
       })}
+      on:click={(e) => handleItemClick(e, tabId)}
     >
       <!-- Favicon or fallback -->
       {#if favIconUrl}
