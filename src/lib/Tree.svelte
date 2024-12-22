@@ -50,7 +50,11 @@
 
   <li data-level={level} class={level !== 1 ? "pl-4" : ""}>
     <button
-      class="flex items-center gap-1 rounded-md p-1 mb-0.5 hover:bg-zinc-700 focus:bg-zinc-700 cursor-pointer group relative w-full pr-8"
+      class="flex items-center gap-1 rounded-md p-1 mb-1 hover:bg-zinc-700 focus:bg-zinc-700 cursor-pointer group relative w-full pr-8 {$isSelected(
+        itemId,
+      )
+        ? 'ring-2 ring-orange-400 bg-orange-400/10'
+        : ''}"
       data-tab-id={tabId}
       use:melt={$item({
         id: itemId,
@@ -67,11 +71,6 @@
       <span class="select-none truncate flex-1 text-left ml-2" {title}
         >{title}</span
       >
-
-      <!-- Selected icon -->
-      {#if $isSelected(itemId)}
-        <ArrowLeft class="h-4 w-4 flex-shrink-0" />
-      {/if}
 
       <!-- Close button -->
       <a
