@@ -20,15 +20,18 @@
   const {
     elements: { item, group },
     helpers: { isExpanded, isSelected },
+    states: { selectedItem },
   } = getContext<TreeView>("tree");
 
-  function handleItemClick(event: MouseEvent, tabId: number) {
-    event.stopPropagation();
-    tabTreeManager.activateTab(tabId);
-  }
+  $effect(() => {
+    tabTreeManager.activateTab(
+      parseInt($selectedItem?.getAttribute("data-tab-id")!),
+    );
+  });
 
   function handleClose(event: MouseEvent, tabId: number) {
     event.stopPropagation();
+    event.preventDefault();
     tabTreeManager.closeTab(tabId);
   }
 
@@ -46,15 +49,13 @@
   {@const childCount = getChildCount(children)}
 
   <li data-level={level} class={level !== 1 ? "pl-4" : ""}>
-    <div
+    <button
       class="flex items-center gap-1 rounded-md p-1 mb-0.5 hover:bg-zinc-700 focus:bg-zinc-700 cursor-pointer group relative w-full pr-8"
+      data-tab-id={tabId}
       use:melt={$item({
         id: itemId,
         hasChildren,
       })}
-      onclick={(e) => handleItemClick(e, tabId)}
-      role="button"
-      tabindex="0"
     >
       <TreeItemIcon
         {favIconUrl}
@@ -63,7 +64,9 @@
         {childCount}
       />
 
-      <span class="select-none truncate flex-1" {title}>{title}</span>
+      <span class="select-none truncate flex-1 text-left ml-2" {title}
+        >{title}</span
+      >
 
       <!-- Selected icon -->
       {#if $isSelected(itemId)}
@@ -71,15 +74,16 @@
       {/if}
 
       <!-- Close button -->
-      <button
+      <a
         type="button"
-        class="opacity-0 group-hover:opacity-100 hover:bg-zinc-600 p-1 rounded absolute right-1 cursor-pointer flex-shrink-0"
+        href="/"
+        class="opacity-0 group-focus:opacity-100 group-hover:opacity-100 focus:opacity-100 hover:bg-zinc-600 p-1 rounded absolute right-1 cursor-pointer flex-shrink-0"
         onclick={(e) => handleClose(e, tabId)}
         onkeydown={(e) => e.key === "Enter" && handleClose(e, tabId)}
       >
         <X class="h-3 w-3" />
-      </button>
-    </div>
+      </a>
+    </button>
 
     {#if children}
       <ul use:melt={$group({ id: itemId })}>
