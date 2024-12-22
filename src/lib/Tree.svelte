@@ -1,13 +1,6 @@
 <script module lang="ts">
   import { ArrowLeft, ChevronRight, ChevronDown, X } from "lucide-svelte";
   import type { TreeItem } from "./tabTree";
-
-  export const icons = {
-    chevronRight: ChevronRight,
-    chevronDown: ChevronDown,
-    highlight: ArrowLeft,
-    close: X,
-  };
 </script>
 
 <script lang="ts">
@@ -74,8 +67,7 @@
 
       <!-- Selected icon -->
       {#if $isSelected(itemId)}
-        {@const SvelteComponent_2 = icons["highlight"]}
-        <SvelteComponent_2 class="h-4 w-4 flex-shrink-0" />
+        <ArrowLeft class="h-4 w-4 flex-shrink-0" />
       {/if}
 
       <!-- Close button -->
@@ -85,7 +77,7 @@
         onclick={(e) => handleClose(e, tabId)}
         onkeydown={(e) => e.key === "Enter" && handleClose(e, tabId)}
       >
-        <icons.close class="h-3 w-3" />
+        <X class="h-3 w-3" />
       </button>
     </div>
 
