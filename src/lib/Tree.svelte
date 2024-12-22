@@ -11,6 +11,7 @@
 
 <script lang="ts">
   import Tree from "./Tree.svelte";
+  import TreeItemIcon from "./TreeItemIcon.svelte";
   import { melt, type TreeView } from "@melt-ui/svelte";
   import { getContext } from "svelte";
   import { tabTreeManager } from "./tabTree";
@@ -31,11 +32,19 @@
     event.stopPropagation();
     tabTreeManager.activateTab(tabId);
   }
+
+  function getChildCount(children: TreeItem[] | undefined): number {
+    if (!children) return 0;
+    return children.reduce((count, item) => {
+      return count + 1 + getChildCount(item.children);
+    }, 0);
+  }
 </script>
 
 {#each treeItems as { title, favIconUrl, children, tabId }, i}
   {@const itemId = `${title}-${i}`}
   {@const hasChildren = !!children?.length}
+  {@const childCount = getChildCount(children)}
 
   <li data-level={level} class={level !== 1 ? "pl-4" : ""}>
     <button
@@ -46,27 +55,12 @@
       })}
       on:click={(e) => handleItemClick(e, tabId)}
     >
-      <!-- Favicon or fallback -->
-      {#if favIconUrl}
-        <img src={favIconUrl} alt="" class="h-4 w-4" />
-      {:else}
-        <div class="h-4 w-4 bg-gray-200 rounded-sm" />
-        <!-- Fallback for no favicon -->
-      {/if}
-
-      <!-- Expansion indicator for items with children -->
-      {#if hasChildren}
-        {#if $isExpanded(itemId)}
-          {@const SvelteComponent = icons["chevronDown"]}
-          <SvelteComponent class="h-4 w-4" />
-        {:else}
-          {@const SvelteComponent = icons["chevronRight"]}
-          <SvelteComponent class="h-4 w-4" />
-        {/if}
-      {:else}
-        <div class="w-4" />
-        <!-- Spacer for items without children -->
-      {/if}
+      <TreeItemIcon
+        {favIconUrl}
+        isExpanded={$isExpanded(itemId)}
+        {hasChildren}
+        {childCount}
+      />
 
       <span class="select-none truncate max-w-[200px]" {title}>{title}</span>
 
