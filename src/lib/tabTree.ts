@@ -125,6 +125,10 @@ class TabTreeManager {
       await browser.windows.update(tab.windowId, { focused: true });
     }
   }
+
+  public async closeTab(tabId: number) {
+    await browser.tabs.remove(tabId);
+  }
 }
 
 // Create and export a singleton instance

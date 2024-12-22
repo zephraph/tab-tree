@@ -1,11 +1,12 @@
 <script module lang="ts">
-  import { ArrowLeft, ChevronRight, ChevronDown } from "lucide-svelte";
+  import { ArrowLeft, ChevronRight, ChevronDown, X } from "lucide-svelte";
   import type { TreeItem } from "./tabTree";
 
   export const icons = {
     chevronRight: ChevronRight,
     chevronDown: ChevronDown,
     highlight: ArrowLeft,
+    close: X,
   };
 </script>
 
@@ -33,6 +34,11 @@
     tabTreeManager.activateTab(tabId);
   }
 
+  function handleClose(event: MouseEvent, tabId: number) {
+    event.stopPropagation();
+    tabTreeManager.closeTab(tabId);
+  }
+
   function getChildCount(children: TreeItem[] | undefined): number {
     if (!children) return 0;
     return children.reduce((count, item) => {
@@ -47,13 +53,15 @@
   {@const childCount = getChildCount(children)}
 
   <li data-level={level} class={level !== 1 ? "pl-4" : ""}>
-    <button
-      class="flex items-center gap-1 rounded-md p-1 focus:bg-magnum-200"
+    <div
+      class="flex items-center gap-1 rounded-md p-1 mb-0.5 hover:bg-zinc-700 focus:bg-zinc-700 cursor-pointer group relative w-full pr-8"
       use:melt={$item({
         id: itemId,
         hasChildren,
       })}
       on:click={(e) => handleItemClick(e, tabId)}
+      role="button"
+      tabindex="0"
     >
       <TreeItemIcon
         {favIconUrl}
@@ -62,14 +70,24 @@
         {childCount}
       />
 
-      <span class="select-none truncate max-w-[200px]" {title}>{title}</span>
+      <span class="select-none truncate flex-1" {title}>{title}</span>
 
       <!-- Selected icon -->
       {#if $isSelected(itemId)}
         {@const SvelteComponent_2 = icons["highlight"]}
-        <SvelteComponent_2 class="h-4 w-4" />
+        <SvelteComponent_2 class="h-4 w-4 flex-shrink-0" />
       {/if}
-    </button>
+
+      <!-- Close button -->
+      <button
+        type="button"
+        class="opacity-0 group-hover:opacity-100 hover:bg-zinc-600 p-1 rounded absolute right-1 cursor-pointer flex-shrink-0"
+        on:click={(e) => handleClose(e, tabId)}
+        on:keydown={(e) => e.key === "Enter" && handleClose(e, tabId)}
+      >
+        <svelte:component this={icons.close} class="h-3 w-3" />
+      </button>
+    </div>
 
     {#if children}
       <ul use:melt={$group({ id: itemId })}>
