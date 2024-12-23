@@ -7,6 +7,7 @@
   import Tree from "./Tree.svelte";
   import TreeItemIcon from "./TreeItemIcon.svelte";
   import { melt, type TreeView } from "@melt-ui/svelte";
+  import type { MeltEventHandler } from "@melt-ui/svelte/internal/types";
   import { getContext } from "svelte";
   import { tabTreeManager } from "./tabTree";
 
@@ -35,16 +36,27 @@
     tabTreeManager.closeTab(tabId);
   }
 
-  function handleKeydown(event: KeyboardEvent) {
-    if (event.key === "n") {
+  const handleKeydown: MeltEventHandler<KeyboardEvent> = (event) => {
+    const key = event.detail.originalEvent.key;
+    if (key === "n") {
       event.preventDefault();
       tabTreeManager.createTab();
-    } else if (event.key === "q" && $selectedItem) {
+    } else if (key === "q" && $selectedItem) {
       event.preventDefault();
       const tabId = parseInt($selectedItem.getAttribute("data-tab-id")!);
       tabTreeManager.closeTab(tabId);
     }
-  }
+  };
+
+  const handleClick: MeltEventHandler<MouseEvent> = (event) => {
+    const icon = (event.target as HTMLElement).querySelector(
+      "[data-item-icon]",
+    );
+    if (!icon || !icon.contains(event.detail.originalEvent.target as Node)) {
+      event.preventDefault();
+      $selectedItem = event.target as HTMLElement;
+    }
+  };
 
   function getChildCount(children: TreeItem[] | undefined): number {
     if (!children) return 0;
@@ -71,7 +83,8 @@
         id: itemId,
         hasChildren,
       })}
-      onkeydown={handleKeydown}
+      onm-click={handleClick}
+      onm-keydown={handleKeydown}
     >
       <TreeItemIcon
         {favIconUrl}

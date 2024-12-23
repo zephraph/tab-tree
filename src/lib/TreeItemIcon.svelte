@@ -8,15 +8,10 @@
     hasChildren: boolean;
   }
 
-  let {
-    favIconUrl,
-    isExpanded,
-    childCount,
-    hasChildren
-  }: Props = $props();
+  let { favIconUrl, isExpanded, childCount, hasChildren }: Props = $props();
 </script>
 
-<div class="relative group/icon">
+<div data-item-icon class="relative group/icon">
   <!-- Favicon or fallback -->
   <div
     class="h-4 w-4 transition-opacity duration-200 {hasChildren

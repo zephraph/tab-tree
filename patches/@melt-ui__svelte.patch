@@ -1,0 +1,13 @@
+diff --git a/dist/internal/types.d.ts b/dist/internal/types.d.ts
+index a5c969e6e1545dc778e9311100b9be1f036a09d7..aec52606ff64abc23217e3af20eb89611e589580 100644
+--- a/dist/internal/types.d.ts
++++ b/dist/internal/types.d.ts
+@@ -41,7 +41,7 @@ export type MeltEvent<E extends Event> = CustomEvent<{
+ }>;
+ export type MeltEventHandler<E extends Event> = EventHandler<Expand<Omit<MeltEvent<E>, 'initCustomEvent'>>>;
+ export type MeltActionReturn<Events extends keyof HTMLElementEventMap> = ActionReturn<undefined, {
+-    [K in Events as `on:m-${string & K}`]?: K extends keyof HTMLElementEventMap ? MeltEventHandler<HTMLElementEventMap[K]> : never;
++    [K in Events as `onm-${string & K}`]?: K extends keyof HTMLElementEventMap ? MeltEventHandler<HTMLElementEventMap[K]> : never;
+ }>;
+ type CustomMeltComponentEvents<Events extends keyof HTMLElementEventMap> = {
+     [K in Events as `m-${string & K}`]?: K extends keyof HTMLElementEventMap ? MeltEventHandler<HTMLElementEventMap[K]> : never;
