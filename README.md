@@ -1,7 +1,5 @@
-# WXT + Svelte
+# Tab Tree
 
-This template should help get you started developing with Svelte in WXT.
+A web extension that allows you to manage tabs in a tree structure. Inspired by [sidebery](https://github.com/mbnuqw/sidebery).
 
-## Recommended IDE Setup
-
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+This was started during [Side Project Saturdays](https://just-be.dev/e/side-project-saturdays)
