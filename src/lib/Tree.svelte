@@ -36,18 +36,6 @@
     tabTreeManager.closeTab(tabId);
   }
 
-  const handleKeydown: MeltEventHandler<KeyboardEvent> = (event) => {
-    const key = event.detail.originalEvent.key;
-    if (key === "n") {
-      event.preventDefault();
-      tabTreeManager.createTab();
-    } else if (key === "q" && $selectedItem) {
-      event.preventDefault();
-      const tabId = parseInt($selectedItem.getAttribute("data-tab-id")!);
-      tabTreeManager.closeTab(tabId);
-    }
-  };
-
   const handleClick: MeltEventHandler<MouseEvent> = (event) => {
     const icon = (event.target as HTMLElement).querySelector(
       "[data-item-icon]",
@@ -84,7 +72,6 @@
         hasChildren,
       })}
       onm-click={handleClick}
-      onm-keydown={handleKeydown}
     >
       <TreeItemIcon
         {favIconUrl}

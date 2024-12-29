@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { createTreeView } from "@melt-ui/svelte";
+  import { createTreeView, melt } from "@melt-ui/svelte";
   import { setContext } from "svelte";
 
   import Tree from "$lib/Tree.svelte";
-  import { treeItemsStore } from "$lib/tabTree";
+  import { treeItemsStore, tabTreeManager } from "$lib/tabTree";
+  import type { MeltEventHandler } from "@melt-ui/svelte/internal/types";
 
   const ctx = createTreeView({
     defaultExpanded: [],
@@ -12,8 +13,23 @@
 
   const {
     elements: { tree },
+    states: { selectedItem },
   } = ctx;
+
+  const handleKeydown = (event: KeyboardEvent) => {
+    const key = event.key;
+    if (key === "n") {
+      event.preventDefault();
+      tabTreeManager.createTab();
+    } else if (key === "q" && $selectedItem) {
+      event.preventDefault();
+      const tabId = parseInt($selectedItem.getAttribute("data-tab-id")!);
+      tabTreeManager.closeTab(tabId);
+    }
+  };
 </script>
+
+<svelte:window onkeydown={handleKeydown} />
 
 <div class="flex flex-col h-full rounded-xl bg-zinc-800 text-neutral-100">
   <div class="flex flex-col gap-1 px-4 pt-4">
