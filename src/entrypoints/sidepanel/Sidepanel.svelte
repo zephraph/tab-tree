@@ -1,10 +1,21 @@
 <script lang="ts">
-  import { createTreeView, melt } from "@melt-ui/svelte";
+  import { createTreeView } from "@melt-ui/svelte";
   import { setContext } from "svelte";
 
   import Tree from "$lib/Tree.svelte";
   import { treeItemsStore, tabTreeManager } from "$lib/tabTree";
-  import type { MeltEventHandler } from "@melt-ui/svelte/internal/types";
+
+  type KeyMap = Record<string, (() => void) | [() => boolean, () => void]>;
+  const keyMap: KeyMap = {
+    n: () => tabTreeManager.createTab(),
+    q: [
+      () => !!$selectedItem,
+      () => {
+        const tabId = parseInt($selectedItem!.getAttribute("data-tab-id")!);
+        tabTreeManager.closeTab(tabId);
+      },
+    ],
+  };
 
   const ctx = createTreeView({
     defaultExpanded: [],
@@ -17,14 +28,17 @@
   } = ctx;
 
   const handleKeydown = (event: KeyboardEvent) => {
-    const key = event.key;
-    if (key === "n") {
-      event.preventDefault();
-      tabTreeManager.createTab();
-    } else if (key === "q" && $selectedItem) {
-      event.preventDefault();
-      const tabId = parseInt($selectedItem.getAttribute("data-tab-id")!);
-      tabTreeManager.closeTab(tabId);
+    if (event.key in keyMap) {
+      const keyAction = keyMap[event.key];
+      if (Array.isArray(keyAction)) {
+        if (keyAction[0]()) {
+          event.preventDefault();
+          keyAction[1]();
+        }
+      } else {
+        event.preventDefault();
+        keyAction();
+      }
     }
   };
 </script>
